@@ -1,0 +1,18 @@
+h1 {
+  height: 60px;
+  background-color: lightblue;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 34px;
+  font-family: "Montserrat", sans-serif;
+}
+
+#photo-template {
+  background-color: #eee;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+#photo-template h2 {
+  background-color: lightblue;
+  font-style: oblique;
+}
