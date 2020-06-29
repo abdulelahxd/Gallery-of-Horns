@@ -1,0 +1,27 @@
+header select {
+  margin: 50px 45%;
+}
+
+#photo-template {
+  width: 30%;
+  margin: 10px auto;
+}
+#photo-template h2 {
+  padding: 8px;
+  border-radius: 6px;
+  margin: 14px;
+  text-align: center;
+}
+
+#photo-template img {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: auto 26%;
+}
+#photo-template p {
+  padding-top: 12px;
+  padding-left: 8px;
+  text-align: start;
+  line-height: 1.4em;
+}
