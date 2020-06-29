@@ -12,6 +12,7 @@ $.ajax("./data/page-1.json").then((data) => {
     animal.renderCard();
     animal.renderOptions();
   });
+  $("main div:nth-child(2)").remove();
   console.log(newArr);
 });
 
@@ -31,11 +32,12 @@ Animals.prototype.renderCard = function(){
   let renImg = $("#imgId").attr('src',this.image_url);
   let renParagraph = $('#paraId').text(this.description);
     $('main').append(imgSection);
+    // $('#remove').remove();
   }
   
   
-var newArr = [];
-Animals.prototype.renderOptions = function(){
+  var newArr = [];
+  Animals.prototype.renderOptions = function(){
   if(!newArr.includes(this.keyword)){
     newArr.push(this.keyword);
     $('#select1').append(`<option id = "${this.keyword}" value = "${this.keyword}" >${this.keyword}</option>`);
@@ -43,7 +45,7 @@ Animals.prototype.renderOptions = function(){
 }
 
 $('#select1').on("change", (evnt) => {
-  $("#photo-template").empty();
+  $('main').empty();
   let md = "";
   $("#select1 option:selected").each(function () {
       md = $(this).text();
@@ -53,15 +55,15 @@ $('#select1').on("change", (evnt) => {
   }
   arr.forEach((item, i) => {
       let type = item.keyword;
-      console.log('type : '+type+' ,md: '+md);
-      console.log( 'result :'+ md ===type);
+      // console.log('type : '+type+' ,md: '+md);
+      // console.log( 'result :'+ md ===type);
       if (md===type) {
-          console.log('reached hinsidde the condition');
-          let div = $("<div></div>");
-          let h2 = $("<h2></h2>").text(item.title);
-          let imgEl = $("<img>").attr(`src`, item.image_url);
-          let pEl = $("<p></p>").text(item.description);
-          $("#photo-template").append(div);
+          // console.log('reached hinsidde the condition');
+          let div = $("<div id ='photo-template'></div>");
+          let h2 = $("<h2 id ='titleId'></h2>").text(item.title);
+          let imgEl = $("<img id = 'imgId'>").attr(`src`, item.image_url);
+          let pEl = $("<p id = 'paraId'></p>").text(item.description);
+          $('main').append(div);
           div.append(h2, imgEl, pEl);
       }
   })
