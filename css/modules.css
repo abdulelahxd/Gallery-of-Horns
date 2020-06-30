@@ -6,6 +6,12 @@ h1 {
   font-size: 34px;
   font-family: "Montserrat", sans-serif;
 }
+h2 {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 34px;
+  font-family: "Montserrat", sans-serif;
+}
 
 #photo-template {
   background-color: #eee;
