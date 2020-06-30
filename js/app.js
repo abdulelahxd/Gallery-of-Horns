@@ -1,70 +1,147 @@
 "use strict";
 
+// globl vars
+let mainPageStatus = true;
+let secondPageStatus = false;
+
+// getting JSON file
 const getAjax = {
   method: "get",
   datatype: "json",
 };
 
+// import data from JSON file
 $.ajax("./data/page-1.json").then((data) => {
-// console.log(data);
   data.forEach((val, idx) => {
-    let animal = new Animals(val.title,val.image_url,val.description,val.keyword);
+    let animal = new Animals(val);
     animal.renderCard();
     animal.renderOptions();
   });
-  $("main div:nth-child(2)").remove();
-  console.log(newArr);
 });
 
+// arrayOfObjectsay of objects
+let arrayOfObjects = [];
 
-let arr = [];
-function Animals(title, image_url, description, keyword) {
-  this.title = title;
-  this.image_url = image_url;
-  this.description = description;
-  this.keyword = keyword;
-  arr.push(this);
+// the constructor to create objects
+function Animals(val) {
+  this.title = val.title;
+  this.image_url = val.image_url;
+  this.description = val.description;
+  this.keyword = val.keyword;
+  this.horns = val.horns;
+  arrayOfObjects.push(this);
 }
 
-Animals.prototype.renderCard = function(){
-  let imgSection = $("#photo-template").clone();
-  let renH2 = $("#titleId").text(this.title);
-  let renImg = $("#imgId").attr('src',this.image_url);
-  let renParagraph = $('#paraId').text(this.description);
-    $('main').append(imgSection);
-    // $('#remove').remove();
-  }
-  
-  
-  var newArr = [];
-  Animals.prototype.renderOptions = function(){
-  if(!newArr.includes(this.keyword)){
-    newArr.push(this.keyword);
-    $('#select1').append(`<option id = "${this.keyword}" value = "${this.keyword}" >${this.keyword}</option>`);
-  }
-}
+// prototype to render the animal info
+Animals.prototype.renderCard = function () {
+  let animalInfoVar = $("#animalInfo").html();
+  let newAnimal = Mustache.render(animalInfoVar, this);
+  $("main").append(newAnimal);
+};
 
-$('#select1').on("change", (evnt) => {
-  $('main').empty();
-  let md = "";
-  $("#select1 option:selected").each(function () {
-      md = $(this).text();
+// arrayOfObjectsay to prevent the duplicates
+var uniqueOptions = [];
+
+// this prototype for rendering the options for the dropmenu
+Animals.prototype.renderOptions = function () {
+  if (!uniqueOptions.includes(this.keyword)) {
+    uniqueOptions.push(this.keyword);
+    $("#select1").append(
+      `<option id = "${this.keyword}" value = "${this.keyword}" >${this.keyword}</option>`
+    );
+  }
+};
+
+$("#secondPage").click(() => {
+  mainPageStatus = false;
+  secondPageStatus = true;
+  $("main").empty();
+  $("option:not(:first-child)").css("display", "none");
+  $("header .fixed").css("display", "block");
+  $.ajax("./data/page-2.json").then((data) => {
+    data.forEach((val, idx) => {
+      let animal = new Animals(val);
+      animal.renderCard();
+      animal.renderOptions();
+    });
   });
-  if(md==='Filter by Keyword'){
-      location.reload();
-  }
-  arr.forEach((item, i) => {
-      let type = item.keyword;
-      // console.log('type : '+type+' ,md: '+md);
-      // console.log( 'result :'+ md ===type);
-      if (md===type) {
-          // console.log('reached hinsidde the condition');
-          let div = $("<div id ='photo-template'></div>");
-          let h2 = $("<h2 id ='titleId'></h2>").text(item.title);
-          let imgEl = $("<img id = 'imgId'>").attr(`src`, item.image_url);
-          let pEl = $("<p id = 'paraId'></p>").text(item.description);
-          $('main').append(div);
-          div.append(h2, imgEl, pEl);
-      }
-  })
 });
+
+$("#mainPage").click(() => {
+  location.reload();
+});
+
+// this will render animal info depending on the selected option category
+$("#select1").on("change", (evnt) => {
+  $("main").empty();
+  let nameAL = "";
+  $("#select1 option:selected").each(function () {
+    nameAL = $(this).text();
+  });
+  if (nameAL === "Filter by Keyword") {
+    if (mainPageStatus) {
+      location.reload();
+    } else if (secondPageStatus) {
+      $("#secondPage").trigger("click");
+    }
+  }
+  arrayOfObjects.forEach((item, i) => {
+    let type = item.keyword;
+    if (nameAL === type) {
+      let Templ = $("#animalInfo").html();
+      let newobj = Mustache.render(Templ, item);
+      $("main").append(newobj);
+    }
+  });
+});
+
+//select sort options
+$("#selectSortMenu").change(() => {
+  $("main").empty();
+  let selected = $("#selectSortMenu option:selected").val();
+  if (selected === "sort by horns") {
+    sortByHorns();
+  } else if (selected === "sort by title") {
+    sortByTitle();
+  }
+});
+
+//import json then sort base on horns prop
+function sortByHorns(obj) {
+  $.ajax("./data/page-1.json").then((data) => {
+    data.sort((a, b) => {
+      if (a.horns < b.horns) {
+        return 1;
+      } else if (a.horns > b.horns) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    console.log(data);
+    data.forEach((val, idx) => {
+      let animal = new Animals(val);
+      animal.renderCard();
+      animal.renderOptions();
+    });
+  });
+}
+
+function sortByTitle(obj) {
+  $.ajax("./data/page-1.json").then((data) => {
+    data.sort((a, b) => {
+      if (a.title.toUpperCase() > b.title.toUpperCase()) {
+        return 1;
+      } else if (a.title.toUpperCase() < b.title.toUpperCase()) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    data.forEach((val, idx) => {
+      let animal = new Animals(val);
+      animal.renderCard();
+      animal.renderOptions();
+    });
+  });
+}
