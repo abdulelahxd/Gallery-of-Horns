@@ -1,7 +1,9 @@
 header select {
   margin: 50px 45%;
 }
-
+#selectSortMenu {
+  margin: 20px 46%;
+}
 #photo-template {
   width: 30%;
   margin: 10px auto;
@@ -24,4 +26,9 @@ header select {
   padding-left: 8px;
   text-align: start;
   line-height: 1.4em;
+}
+#optionDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
