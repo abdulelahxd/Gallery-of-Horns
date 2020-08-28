@@ -38,7 +38,7 @@ run live server on the IDE
 * **abdulelah kassara** - *class task* - [abdulelahxd](https://github.com/abdulelahxd)
 
 ## Time 
-one hour and half only
+10 hours of work
 
 ## License
 
